@@ -5,6 +5,7 @@ pipeline {
         DOCKER_USER = "aneeqakamran97"
         DOCKER_REGISTRY = "docker.io"
         DOCKER_CLI = "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe"
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${PATH}"
     }
 
     stages {
@@ -18,8 +19,8 @@ pipeline {
         }
         stage('Build Docker Images') {
             steps {
-                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/frontend:latest -f frontend/frontend.dockerfile frontend'
-                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/backend:latest -f backend/backend.dockerfile backend'
+                bat '"%DOCKER_CLI%" build --no-cache -t %DOCKER_USER%/frontend:latest -f frontend/frontend.dockerfile frontend'
+                bat '"%DOCKER_CLI%" build --no-cache -t %DOCKER_USER%/backend:latest -f backend/backend.dockerfile backend'
             }
         }
 
