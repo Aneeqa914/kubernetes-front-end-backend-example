@@ -26,7 +26,7 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker_creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     bat '''
                         "%DOCKER_CLI%" login -u %USER% -p %PASS%
                         "%DOCKER_CLI%" push %DOCKER_USER%/frontend:latest
