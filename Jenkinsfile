@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_USER = "your_dockerhub_username"
+        DOCKER_USER = "aneeqakamran97"
         DOCKER_REGISTRY = "docker.io"
+        DOCKER_CLI = "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe"
     }
 
     stages {
@@ -17,8 +18,8 @@ pipeline {
         }
         stage('Build Docker Images') {
             steps {
-                bat 'docker build -t %DOCKER_USER%/frontend:latest frontend'
-                bat 'docker build -t %DOCKER_USER%/backend:latest backend'
+                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/frontend:latest frontend'
+                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/backend:latest backend'
             }
         }
 
@@ -26,9 +27,9 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     bat '''
-                        docker login -u %USER% -p %PASS%
-                        docker push %DOCKER_USER%/frontend:latest
-                        docker push %DOCKER_USER%/backend:latest
+                        "%DOCKER_CLI%" login -u %USER% -p %PASS%
+                        "%DOCKER_CLI%" push %DOCKER_USER%/frontend:latest
+                        "%DOCKER_CLI%" push %DOCKER_USER%/backend:latest
                     '''
                 }
             }
