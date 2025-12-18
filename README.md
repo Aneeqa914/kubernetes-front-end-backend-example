@@ -209,3 +209,5 @@ for `Microk8s` and `GCP` versions can be found in corresponding `ConfigMaps` and
 
 
 
+#   D E V O P S _ M A J O R  
+ 
