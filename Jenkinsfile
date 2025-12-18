@@ -18,8 +18,8 @@ pipeline {
         }
         stage('Build Docker Images') {
             steps {
-                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/frontend:latest frontend'
-                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/backend:latest backend'
+                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/frontend:latest -f frontend/frontend.dockerfile frontend'
+                bat '"%DOCKER_CLI%" build -t %DOCKER_USER%/backend:latest -f backend/backend.dockerfile backend'
             }
         }
 
