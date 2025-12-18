@@ -15,7 +15,6 @@ pipeline {
                     credentialsId: 'github-token'
             }
         }
-
         stage('Build Docker Images') {
             steps {
                 sh 'docker build -t $DOCKER_USER/frontend:latest frontend'
