@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                    bat 'kubectl apply -f k8s-gcp/'
+                    bat 'kubectl apply -f k8s-gcp/ --validate=false'
                 }
             }
         }
