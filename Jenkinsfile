@@ -17,18 +17,18 @@ pipeline {
         }
         stage('Build Docker Images') {
             steps {
-                sh 'docker build -t $DOCKER_USER/frontend:latest frontend'
-                sh 'docker build -t $DOCKER_USER/backend:latest backend'
+                bat 'docker build -t %DOCKER_USER%/frontend:latest frontend'
+                bat 'docker build -t %DOCKER_USER%/backend:latest backend'
             }
         }
 
         stage('Push Docker Images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh '''
-                        docker login -u $USER -p $PASS
-                        docker push $DOCKER_USER/frontend:latest
-                        docker push $DOCKER_USER/backend:latest
+                    bat '''
+                        docker login -u %USER% -p %PASS%
+                        docker push %DOCKER_USER%/frontend:latest
+                        docker push %DOCKER_USER%/backend:latest
                     '''
                 }
             }
@@ -37,7 +37,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                    sh 'kubectl apply -f k8s/'
+                    bat 'kubectl apply -f k8s/'
                 }
             }
         }
