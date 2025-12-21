@@ -49,10 +49,24 @@ pipeline {
                 ]) {
                     bat '''
                         @echo off
-                        set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
-                        set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
-                        set AWS_DEFAULT_REGION=us-east-1
+                        REM Create AWS credentials directory
+                        if not exist "%USERPROFILE%\.aws" mkdir "%USERPROFILE%\.aws"
+                        
+                        REM Write AWS credentials to file
+                        echo [default] > "%USERPROFILE%\.aws\credentials"
+                        echo aws_access_key_id=%AWS_ACCESS_KEY_ID% >> "%USERPROFILE%\.aws\credentials"
+                        echo aws_secret_access_key=%AWS_SECRET_ACCESS_KEY% >> "%USERPROFILE%\.aws\credentials"
+                        
+                        REM Write AWS config
+                        echo [default] > "%USERPROFILE%\.aws\config"
+                        echo region=us-east-1 >> "%USERPROFILE%\.aws\config"
+                        
+                        REM Deploy to Kubernetes
                         kubectl apply -f k8s-gcp/ --validate=false
+                        
+                        REM Clean up credentials
+                        del "%USERPROFILE%\.aws\credentials"
+                        del "%USERPROFILE%\.aws\config"
                     '''
                 }
             }
