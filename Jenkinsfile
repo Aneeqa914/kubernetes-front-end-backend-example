@@ -42,10 +42,15 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                    // AWS credentials are automatically picked up from Jenkins environment variables
-                    // (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION)
-                    bat 'kubectl apply -f k8s-gcp/ --validate=false'
+                withCredentials([
+                    file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG'),
+                    string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    bat '''
+                        set AWS_DEFAULT_REGION=us-east-1
+                        kubectl apply -f k8s-gcp/ --validate=false
+                    '''
                 }
             }
         }
