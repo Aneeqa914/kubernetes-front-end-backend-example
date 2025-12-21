@@ -48,6 +48,9 @@ pipeline {
                     string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
                     bat '''
+                        @echo off
+                        set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+                        set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
                         set AWS_DEFAULT_REGION=us-east-1
                         kubectl apply -f k8s-gcp/ --validate=false
                     '''
